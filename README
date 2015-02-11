@@ -1,10 +1,11 @@
-To build and use the buildroot stuff, do the following:
+To build and use the buildroot stuff for BeagleBone, do the following:
 
-1) run 'make menuconfig'
-2) select the packages you wish to compile
-3) run 'make'
-4) wait while it compiles
-5) Use your shiny new root filesystem. Depending on which sort of
+1) run 'make beaglebone_defconfig'
+2) run 'make menuconfig'
+3) select the packages you wish to compile
+4) run 'make'
+5) wait while it compiles
+6) Use your shiny new root filesystem. Depending on which sort of
     root filesystem you selected, you may want to loop mount it,
     chroot into it, nfs mount it on your target device, burn it
     to flash, or whatever is appropriate for your target system.
