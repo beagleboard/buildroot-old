@@ -1,4 +1,5 @@
 #!/bin/sh -e
+set -x
 #
 # Copyright (c) 2013-2017 Robert Nelson <robertcnelson@gmail.com>
 # Copyright (c) 2018 Jason Kridner <jdk@ti.com>
@@ -46,20 +47,8 @@ usb_ms_ro=1
 usb_ms_stall=0
 usb_ms_removable=1
 usb_ms_nofua=1
-
-#original user:
 usb_image_file="/var/local/usb_mass_storage.img"
-
-#*.iso priority over *.img
-if [ -f /var/local/bb_usb_mass_storage.iso ] ; then
-	usb_image_file="/var/local/bb_usb_mass_storage.iso"
-elif [ -f /var/local/bb_usb_mass_storage.img ] ; then
-	usb_image_file="/var/local/bb_usb_mass_storage.img"
-fi
-
-if [ ! "x${usb_image_file}" = "x" ] ; then
-	echo "${log} usb_image_file=[`readlink -f ${usb_image_file}`]"
-fi
+echo "${log} usb_image_file=[`readlink -f ${usb_image_file}`]"
 
 usb_iserialnumber="1234BBBK5678"
 usb_iproduct="BeagleBone"
@@ -382,6 +371,7 @@ use_libcomposite () {
 			/sbin/depmod -a
 		fi
 		echo "${log} ERROR: [libcomposite didn't load]"
+		exit 1
 	fi
 }
 
@@ -392,7 +382,4 @@ use_libcomposite
 /usr/sbin/ifconfig usb0 192.168.7.2 netmask 255.255.255.0 || true
 /usr/sbin/ifconfig usb1 192.168.6.2 netmask 255.255.255.0 || true
 
-if [ -d /sys/class/tty/ttyGS0/ ] ; then
-	echo "${log} Starting serial-getty@ttyGS0.service"
-	systemctl start serial-getty@ttyGS0.service || true
-fi
+exit 0
