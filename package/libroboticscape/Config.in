@@ -1,0 +1,9 @@
+config BR2_PACKAGE_LIBROBOTICSCAPE
+	bool "libroboticscape"
+	help
+	  libroboticscape supports sensors and motor drivers on
+	  BeagleBoard.org BeagleBone Blue and BeagleBoard.org
+	  Robotics Cape with either BeagleBoard.org BeagleBone Black
+	  or BeagleBoard.org BeagleBone Black Wireless.
+
+	  https://github.com/StrawsonDesign/Robotics_Cape_Installer
