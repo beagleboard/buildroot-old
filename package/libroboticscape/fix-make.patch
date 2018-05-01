@@ -1,0 +1,107 @@
+diff --git a/Makefile b/Makefile
+index 51a2387..a79f495 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1,6 +1,8 @@
+-prefix		:= /usr
+-RM		:= rm -r -f
+-INSTALL		:= install -m 755
++prefix		?= /usr
++RM		:= rm
++RMFILE		:= $(RM) -r -f
++INSTALL		?=
++INSTALLFILE	:= install -m 755
+ INSTALLDIR	:= install -d -m 755
+ INSTALLDIRWRITE	:= install -d -m 777
+ INSTALLNONEXEC	:= install -m 644
+diff --git a/library/Makefile b/library/Makefile
+index dd2e7e4..4540822 100644
+--- a/library/Makefile
++++ b/library/Makefile
+@@ -13,15 +13,15 @@ SOURCES		:= $(shell find $(SRCDIR) -type f -name *.c)
+ OBJECTS		:= $(SOURCES:$(SRCDIR)/%.c=$(BUILDDIR)/%.o)
+ INCLUDES	:= $(shell find $(INCLUDEDIR) -name '*.h')
+ 
+-# compiler and linker binaries
++# compiler binaries
+ CC		:= gcc
+-LINKER		:= gcc
++LD		:= gcc
+ 
+ # general compiler flags
+ WFLAGS		:= -Wall -Wextra
+-CFLAGS		:= -fPIC -I $(INCLUDEDIR)
++MYCFLAGS	:= -fPIC -I $(INCLUDEDIR)
+ OPT_FLAGS	:= -O1
+-LDFLAGS		:= -lm -lrt -pthread -shared -Wl,-soname,$(SONAME)
++MYLDFLAGS	:= -lm -lrt -pthread -shared -Wl,-soname,$(SONAME)
+ 
+ # different compile flags for math libs
+ MATH_OPT_FLAGS	:= -O3 -ffast-math -ftree-vectorize
+@@ -32,10 +32,12 @@ MATH_OPT_FLAGS	:= -O3 -ffast-math -ftree-vectorize
+ ARCFLAGS	:=
+ 
+ # commands
+-RM		:= rm -rf
+-INSTALL		:= install -m 755
+-INSTALLDIR	:= install -d -m 755
+-INSTALLDIRWRITE	:= install -d -m 777
++RM		:= rm
++RMRF		:= $(RM) -rf
++INSTALL		:= install
++INSTALLEXE	:= $(INSTALL) -m 755
++INSTALLDIR	:= $(INSTALL) -d -m 755
++INSTALLDIRWRITE	:= $(INSTALL) -d -m 777
+ 
+ # prefix variable for making debian package
+ prefix		?= /usr
+@@ -45,19 +47,19 @@ prefix		?= /usr
+ # linking rules
+ $(TARGET): $(OBJECTS)
+ 	@mkdir -p $(LIBDIR)
+-	@$(LINKER) -o $(TARGET) $(OBJECTS) $(LDFLAGS)
++	$(CC) -o $(TARGET) $(OBJECTS) $(MYLDFLAGS)
+ 	@echo "Done making $(TARGET)"
+ 
+ # rule for math libs
+ $(BUILDDIR)/math/%.o : $(SRCDIR)/math/%.c $(INCLUDES)
+ 	@mkdir -p $(dir $(@))
+-	@$(CC) -c $(CFLAGS) $(ARCFLAGS) $(MATH_OPT_FLAGS) $(DEBUGFLAG) $< -o $(@)
++	@$(CC) -c $(MYCFLAGS) $(ARCFLAGS) $(MATH_OPT_FLAGS) $(DEBUGFLAG) $< -o $(@)
+ 	@echo "made: $(@)"
+ 
+ # rule for all other objects
+ $(BUILDDIR)/%.o : $(SRCDIR)/%.c $(INCLUDES)
+ 	@mkdir -p $(dir $(@))
+-	@$(CC) -c $(CFLAGS) $(ARCFLAGS) $(OPT_FLAGS) $(DEBUGFLAG) $< -o $(@)
++	@$(CC) -c $(MYCFLAGS) $(ARCFLAGS) $(OPT_FLAGS) $(DEBUGFLAG) $< -o $(@)
+ 	@echo "made: $(@)"
+ 
+ 
+@@ -82,20 +84,20 @@ install:
+ 	@$(INSTALLDIR) $(DESTDIR)$(prefix)/include
+ 	@cp -r include/* $(DESTDIR)$(prefix)/include
+ 	@$(INSTALLDIR) $(DESTDIR)$(prefix)/lib
+-	@$(INSTALL) $(TARGET) $(DESTDIR)$(prefix)/lib
++	@$(INSTALLEXE) $(TARGET) $(DESTDIR)$(prefix)/lib
+ 	@echo "Library Install Complete"
+ 
+ # cleanup local binaries
+ clean:
+-	@$(RM) $(LIBDIR)
+-	@$(RM) $(BUILDDIR)
++	@$(RMRF) $(LIBDIR)
++	@$(RMRF) $(BUILDDIR)
+ 	@echo "Library Clean Complete"
+ 
+ # uninstall completely from system
+ uninstall:
+-	$(RM) $(DESTDIR)$(prefix)/$(TARGET)
+-	$(RM) $(DESTDIR)$(prefix)/include/roboticscape.h
+-	$(RM) $(DESTDIR)$(prefix)/include/rc
++	$(RMRF) $(DESTDIR)$(prefix)/$(TARGET)
++	$(RMRF) $(DESTDIR)$(prefix)/include/roboticscape.h
++	$(RMRF) $(DESTDIR)$(prefix)/include/rc
+ 	@echo "Library Uninstall Complete"
+ 
+ 
