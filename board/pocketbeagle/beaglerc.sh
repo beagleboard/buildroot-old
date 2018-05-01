@@ -1,5 +1,4 @@
 #!/bin/sh -e
-set -x
 #
 # Copyright (c) 2013-2017 Robert Nelson <robertcnelson@gmail.com>
 # Copyright (c) 2018 Jason Kridner <jdk@ti.com>
