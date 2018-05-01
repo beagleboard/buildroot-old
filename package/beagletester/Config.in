@@ -1,6 +1,6 @@
 config BR2_PACKAGE_BEAGLETESTER
 	bool "beagletester"
-	depends on BR2_PACKAGE_LIBROBOTICSCAPE
+	select BR2_PACKAGE_LIBROBOTICSCAPE
 	help
 	  beagle-tester tests the function of many BeagleBoard.org
 	  products. See https://beagleboard.org.
