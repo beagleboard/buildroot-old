@@ -1,0 +1,10 @@
+--- a/arch/arm/boot/dts/am335x-boneblack.dts	2018-07-19 14:30:41.857328225 -0400
++++ b/arch/arm/boot/dts/am335x-boneblack.dts	2018-07-19 14:33:25.607036897 -0400
+@@ -10,6 +10,7 @@
+ #include "am33xx.dtsi"
+ #include "am335x-bone-common.dtsi"
+ #include "am335x-boneblack-common.dtsi"
++#include "am335x-bone-common-universal.dtsi"
+ /* #include "am335x-bone-jtag.dtsi" */
+ 
+ / {

@@ -12,6 +12,7 @@ BR2_LINUX_KERNEL=y
 BR2_LINUX_KERNEL_CUSTOM_GIT=y
 BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/beagleboard/linux"
 BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="8027b203c88b443a78a08e6abd4c98b0a34d2ec3"
+BR2_LINUX_KERNEL_PATCH="add-universal-overlay.patch"
 BR2_LINUX_KERNEL_DEFCONFIG="bb.org"
 BR2_LINUX_KERNEL_DTS_SUPPORT=y
 BR2_LINUX_KERNEL_INTREE_DTS_NAME="am335x-pocketbeagle am335x-evm am335x-bone am335x-boneblack am335x-boneblack-wireless am335x-bonegreen am335x-bonegreen-wireless am335x-abbbi am335x-boneblue am335x-sancloud-bbe am335x-evmsk"
