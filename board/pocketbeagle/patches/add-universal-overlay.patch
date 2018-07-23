@@ -1,5 +1,5 @@
 --- a/arch/arm/boot/dts/am335x-boneblack.dts	2018-07-19 14:30:41.857328225 -0400
-+++ b/arch/arm/boot/dts/am335x-boneblack.dts	2018-07-19 14:33:25.607036897 -0400
++++ b/arch/arm/boot/dts/am335x-boneblack.dts	2018-07-23 13:55:13.451449025 -0400
 @@ -10,6 +10,7 @@
  #include "am33xx.dtsi"
  #include "am335x-bone-common.dtsi"
@@ -8,3 +8,34 @@
  /* #include "am335x-bone-jtag.dtsi" */
  
  / {
+@@ -31,3 +32,30 @@
+ 		opp-supported-hw = <0x06 0x0100>;
+ 	};
+ };
++
++/*******************************************************************************
++* PWMSS
++*******************************************************************************/
++&epwmss0 {
++	status = "okay";
++};
++
++&epwmss1 {
++	status = "okay";
++};
++
++&epwmss2 {
++	status = "okay";
++};
++
++&ehrpwm0 {
++	status = "okay";
++};
++
++&ehrpwm1 {
++	status = "okay";
++};
++
++&ehrpwm2 {
++	status = "okay";
++};
