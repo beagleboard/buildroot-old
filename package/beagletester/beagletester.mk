@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-BEAGLETESTER_VERSION = 401671278157f9c9a5816d7bebd1dd042ca77990
+BEAGLETESTER_VERSION = 5a16eb0b0f792b0537fb676a1220e952fee61010
 BEAGLETESTER_SITE = $(call github,jadonk,beagle-tester,$(BEAGLETESTER_VERSION))
 BEAGLETESTER_INSTALL_STAGING = YES
 BEAGLETESTER_LICENSE = GPLv2
