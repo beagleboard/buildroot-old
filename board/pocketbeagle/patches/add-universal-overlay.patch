@@ -1,21 +1,44 @@
-From 8d93a721015eb06c04c0acd4b71eb93f6cad3c88 Mon Sep 17 00:00:00 2001
+From 48cfafe3a310706295c74eb2fd6833b01630a7bc Mon Sep 17 00:00:00 2001
 From: Jason Kridner <jdk@ti.com>
 Date: Thu, 26 Jul 2018 13:25:55 -0400
 Subject: [PATCH] am335x-boneblack.dts: enable helpers and PWMs
 
 ---
- arch/arm/boot/dts/am335x-boneblack.dts | 28 ++++++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
+ .../dts/am335x-bone-common-universal.dtsi     |  4 +--
+ arch/arm/boot/dts/am335x-boneblack.dts        | 28 +++++++++++++++++++
+ 2 files changed, 30 insertions(+), 2 deletions(-)
 
+diff --git a/arch/arm/boot/dts/am335x-bone-common-universal.dtsi b/arch/arm/boot/dts/am335x-bone-common-universal.dtsi
+index 781e33fe3d26..312ca98a52bb 100644
+--- a/arch/arm/boot/dts/am335x-bone-common-universal.dtsi
++++ b/arch/arm/boot/dts/am335x-bone-common-universal.dtsi
+@@ -630,7 +630,7 @@
+ 
+ 	/* P9_19 (ZCZ ball D17) */
+ 	P9_19_default_pin: pinmux_P9_19_default_pin {
+-		pinctrl-single,pins = <0x17c  0x37>; };     /* Mode 7, Pull-Up, RxActive */
++		pinctrl-single,pins = <0x17c  0x73>; };     /* (SLEWCTRL_SLOW | PIN_INPUT_PULLUP | MUX_MODE3) */
+ 	P9_19_gpio_pin: pinmux_P9_19_gpio_pin {
+ 		pinctrl-single,pins = <0x17c  0x2F>; };     /* Mode 7, RxActive */
+ 	P9_19_gpio_pu_pin: pinmux_P9_19_gpio_pu_pin {
+@@ -644,7 +644,7 @@
+ 
+ 	/* P9_20 (ZCZ ball D18) */
+ 	P9_20_default_pin: pinmux_P9_20_default_pin {
+-		pinctrl-single,pins = <0x178  0x37>; };     /* Mode 7, Pull-Up, RxActive */
++		pinctrl-single,pins = <0x178  0x73>; };     /* (SLEWCTRL_SLOW | PIN_INPUT_PULLUP | MUX_MODE3) */
+ 	P9_20_gpio_pin: pinmux_P9_20_gpio_pin {
+ 		pinctrl-single,pins = <0x178  0x2F>; };     /* Mode 7, RxActive */
+ 	P9_20_gpio_pu_pin: pinmux_P9_20_gpio_pu_pin {
 diff --git a/arch/arm/boot/dts/am335x-boneblack.dts b/arch/arm/boot/dts/am335x-boneblack.dts
-index 6664d9372f4d..8c0bee5576c1 100644
+index 6664d9372f4d..35ed3ede485e 100644
 --- a/arch/arm/boot/dts/am335x-boneblack.dts
 +++ b/arch/arm/boot/dts/am335x-boneblack.dts
 @@ -10,6 +10,7 @@
  #include "am33xx.dtsi"
  #include "am335x-bone-common.dtsi"
  #include "am335x-boneblack-common.dtsi"
-+#include "am335x-bone-common-univ.dtsi"
++#include "am335x-bone-common-universal.dtsi"
  /* #include "am335x-bone-jtag.dtsi" */
  
  / {
