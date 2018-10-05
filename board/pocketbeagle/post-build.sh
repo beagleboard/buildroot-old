@@ -10,3 +10,5 @@ cp $BOARD_DIR/beaglerc.sh $TARGET_DIR/etc/rc.local
 mkdir -p $TARGET_DIR/boot
 cp $BINARIES_DIR/*.dtb $TARGET_DIR/boot/
 cp $BINARIES_DIR/zImage $TARGET_DIR/boot/
+cd $TARGET_DIR
+ln -s am335x-boneblack.dtb board.dtb
