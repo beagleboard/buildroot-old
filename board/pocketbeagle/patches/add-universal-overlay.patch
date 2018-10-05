@@ -1,12 +1,12 @@
-From 48cfafe3a310706295c74eb2fd6833b01630a7bc Mon Sep 17 00:00:00 2001
+From fe4400baa4b1f4f7d12741e6ec96d1c79d4299dc Mon Sep 17 00:00:00 2001
 From: Jason Kridner <jdk@ti.com>
 Date: Thu, 26 Jul 2018 13:25:55 -0400
-Subject: [PATCH] am335x-boneblack.dts: enable helpers and PWMs
+Subject: [PATCH] am335x-boneblack.dts: enable helpers, PWMs and HDMI
 
 ---
- .../dts/am335x-bone-common-universal.dtsi     |  4 +--
- arch/arm/boot/dts/am335x-boneblack.dts        | 28 +++++++++++++++++++
- 2 files changed, 30 insertions(+), 2 deletions(-)
+ .../dts/am335x-bone-common-universal.dtsi     |  4 +-
+ arch/arm/boot/dts/am335x-boneblack.dts        | 60 +++++++++++++++++++
+ 2 files changed, 62 insertions(+), 2 deletions(-)
 
 diff --git a/arch/arm/boot/dts/am335x-bone-common-universal.dtsi b/arch/arm/boot/dts/am335x-bone-common-universal.dtsi
 index 781e33fe3d26..312ca98a52bb 100644
@@ -31,7 +31,7 @@ index 781e33fe3d26..312ca98a52bb 100644
  		pinctrl-single,pins = <0x178  0x2F>; };     /* Mode 7, RxActive */
  	P9_20_gpio_pu_pin: pinmux_P9_20_gpio_pu_pin {
 diff --git a/arch/arm/boot/dts/am335x-boneblack.dts b/arch/arm/boot/dts/am335x-boneblack.dts
-index 6664d9372f4d..35ed3ede485e 100644
+index 6664d9372f4d..e2b5a6d9933e 100644
 --- a/arch/arm/boot/dts/am335x-boneblack.dts
 +++ b/arch/arm/boot/dts/am335x-boneblack.dts
 @@ -10,6 +10,7 @@
@@ -42,7 +42,7 @@ index 6664d9372f4d..35ed3ede485e 100644
  /* #include "am335x-bone-jtag.dtsi" */
  
  / {
-@@ -31,3 +32,30 @@
+@@ -31,3 +32,62 @@
  		opp-supported-hw = <0x06 0x0100>;
  	};
  };
@@ -72,6 +72,38 @@ index 6664d9372f4d..35ed3ede485e 100644
 +
 +&ehrpwm2 {
 +	status = "okay";
++};
++
++/*******************************************************************************
++ * HDMI
++ *
++ * enabled by disabling the pinmux helpers the driver needs to load
++ *******************************************************************************/
++&ocp {
++	P9_25_pinmux { status = "disabled"; };	/* mcasp0_ahclkx */
++	P9_28_pinmux { status = "disabled"; };	/* mcasp0_axr2 */
++	P9_29_pinmux { status = "disabled"; };	/* mcasp0_fsx */
++	P9_31_pinmux { status = "disabled"; };	/* mcasp0_aclkx */
++	P8_45_pinmux { status = "disabled"; };	/* lcd_data0 */
++	P8_46_pinmux { status = "disabled"; };	/* lcd_data1 */
++	P8_43_pinmux { status = "disabled"; };	/* lcd_data2 */
++	P8_44_pinmux { status = "disabled"; };	/* lcd_data3 */
++	P8_41_pinmux { status = "disabled"; };	/* lcd_data4 */
++	P8_42_pinmux { status = "disabled"; };	/* lcd_data5 */
++	P8_39_pinmux { status = "disabled"; };	/* lcd_data6 */
++	P8_40_pinmux { status = "disabled"; };	/* lcd_data7 */
++	P8_37_pinmux { status = "disabled"; };	/* lcd_data8 */
++	P8_38_pinmux { status = "disabled"; };	/* lcd_data9 */
++	P8_36_pinmux { status = "disabled"; };	/* lcd_data10 */
++	P8_34_pinmux { status = "disabled"; };	/* lcd_data11 */
++	P8_35_pinmux { status = "disabled"; };	/* lcd_data12 */
++	P8_33_pinmux { status = "disabled"; };	/* lcd_data13 */
++	P8_31_pinmux { status = "disabled"; };	/* lcd_data14 */
++	P8_32_pinmux { status = "disabled"; };	/* lcd_data15 */
++	P8_27_pinmux { status = "disabled"; };	/* lcd_vsync */
++	P8_29_pinmux { status = "disabled"; };	/* lcd_hsync */
++	P8_28_pinmux { status = "disabled"; };	/* lcd_pclk */
++	P8_30_pinmux { status = "disabled"; };	/* lcd_ac_bias_en */
 +};
 -- 
 2.17.1
