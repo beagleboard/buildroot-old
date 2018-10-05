@@ -13,5 +13,3 @@ cp $BINARIES_DIR/zImage $TARGET_DIR/boot/
 cd $TARGET_DIR/boot/
 ln -s am335x-boneblack.dtb board.dtb
 echo "$(git show -s --format='Buildroot beagle-tester %h %ci')" > $TARGET_DIR/etc/dogtag
-cp $BUILD_DIR/dnsmasq-2.78/contrib/systemd/dnsmasq.service $TARGET_DIR/lib/systemd/system/
-ln -s /usr/lib/systemd/system/dnsmasq.service $TARGET_DIR/etc/systemd/system/multi-user.target.wants/dnsmasq.service
