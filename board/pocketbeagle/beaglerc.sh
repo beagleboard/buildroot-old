@@ -331,8 +331,6 @@ run_libcomposite () {
 			fi
 		fi
 
-		usb0="enable"
-		usb1="enable"
 		echo "${log} g_multi Created"
 	else
 		echo "${log} FIXME: need to bring down g_multi first, before running a second time."
@@ -368,9 +366,14 @@ use_libcomposite () {
 	else
 		if [ -f /sbin/depmod ] ; then
 			/sbin/depmod -a
+			modprobe libcomposite || true
 		fi
-		echo "${log} ERROR: [libcomposite didn't load]"
-		exit 1
+		if [ -d /sys/module/libcomposite ] ; then
+			run_libcomposite
+		else
+			echo "${log} ERROR: [libcomposite didn't load]"
+			exit 1
+		fi
 	fi
 }
 
@@ -379,6 +382,20 @@ g_network="iSerialNumber=${usb_iserialnumber} iManufacturer=${usb_imanufacturer}
 use_libcomposite
 
 /usr/sbin/ifconfig usb0 192.168.7.2 netmask 255.255.255.0 || true
-/usr/sbin/ifconfig usb1 192.168.6.2 netmask 255.255.255.0 || true
+#/usr/sbin/ifconfig usb1 192.168.6.2 netmask 255.255.255.0 || true
+
+cat <<EOF >/etc/udhcpd.conf
+start      192.168.7.1
+end        192.168.7.1
+interface  usb0
+max_leases 1
+option subnet 255.255.255.252
+option domain local
+option lease 30
+EOF
+
+/sbin/udhcpd /etc/udhcpd.conf
+
+/sbin/udhcpc eth0 &
 
 exit 0
