@@ -12,4 +12,4 @@ cp $BINARIES_DIR/*.dtb $TARGET_DIR/boot/
 cp $BINARIES_DIR/zImage $TARGET_DIR/boot/
 cd $TARGET_DIR/boot/
 ln -s am335x-boneblack.dtb board.dtb
-echo "$(git show -s --format='Buildroot beagle-tester %h %ci')" > $TARGET_DIR/etc/dogtag
+echo "$(git show -s --date=short --format='Buildroot beagle-tester %cd %h')" > $TARGET_DIR/etc/dogtag
