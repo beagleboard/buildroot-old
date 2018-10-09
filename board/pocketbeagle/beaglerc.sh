@@ -398,4 +398,6 @@ EOF
 
 /sbin/udhcpc eth0 &
 
+echo gpio > /sys/devices/platform/ocp/ocp\:A15_pinmux/state
+
 exit 0
