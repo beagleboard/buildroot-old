@@ -7,6 +7,7 @@ BOARD_DIR="$(dirname $0)"
 # copy the boot files to the target rootfs
 cp $BOARD_DIR/uEnv.txt $TARGET_DIR/
 cp $BOARD_DIR/beaglerc.sh $TARGET_DIR/etc/rc.local
+mkdir -p $TARGET_DIR/var/local
 cp $BOARD_DIR/usb_image.img $TARGET_DIR/var/local/usb_mass_storage.img
 mkdir -p $TARGET_DIR/boot
 cp $BINARIES_DIR/*.dtb $TARGET_DIR/boot/
