@@ -1,0 +1,124 @@
+From 9ef14ce6f091b52e69fd40f9469e07ddbaf4f380 Mon Sep 17 00:00:00 2001
+From: Jason Kridner <jdk@ti.com>
+Date: Tue, 9 Oct 2018 02:10:13 -0400
+Subject: [PATCH] am335x-boneblack.dts: add pinmux to A15 (CLKOUT1)
+
+---
+ .../am335x-bone-common-universal-pins.dtsi    | 12 ++++++++
+ .../dts/am335x-bone-common-universal.dtsi     | 29 +++++++++++++++++++
+ .../arm/boot/dts/am335x-boneblack-common.dtsi | 10 +------
+ 3 files changed, 42 insertions(+), 9 deletions(-)
+
+diff --git a/arch/arm/boot/dts/am335x-bone-common-universal-pins.dtsi b/arch/arm/boot/dts/am335x-bone-common-universal-pins.dtsi
+index 9bb59506e311..edc9598c6410 100644
+--- a/arch/arm/boot/dts/am335x-bone-common-universal-pins.dtsi
++++ b/arch/arm/boot/dts/am335x-bone-common-universal-pins.dtsi
+@@ -942,4 +942,16 @@
+ 	/* P9_44                GND     */
+ 	/* P9_45                GND     */
+ 	/* P9_46                GND     */
++
++	/*       (ZCZ ball A15) */
++	A15_default_pin: pinmux_A15_default_pin {
++		pinctrl-single,pins = <0x1b0  0x0b>; };     /* Mode 3 */
++	A15_clkout_pin: pinmux_A15_clkout_pin {
++		pinctrl-single,pins = <0x1b0  0x0b>; };     /* Mode 3 */
++	A15_gpio_pin: pinmux_A15_gpio_pin {
++		pinctrl-single,pins = <0x1b0  0x2f>; };     /* Mode 7, RxActive */
++	A15_gpio_pu_pin: pinmux_A15_gpio_pu_pin {
++		pinctrl-single,pins = <0x1b0  0x37>; };     /* Mode 7, Pull-Up, RxActive */
++	A15_gpio_pd_pin: pinmux_A15_gpio_pd_pin {
++		pinctrl-single,pins = <0x1b0  0x27>; };     /* Mode 7, Pull-Down, RxActive */
+ };
+diff --git a/arch/arm/boot/dts/am335x-bone-common-universal.dtsi b/arch/arm/boot/dts/am335x-bone-common-universal.dtsi
+index 312ca98a52bb..aaa6caabc0b4 100644
+--- a/arch/arm/boot/dts/am335x-bone-common-universal.dtsi
++++ b/arch/arm/boot/dts/am335x-bone-common-universal.dtsi
+@@ -934,6 +934,18 @@
+ 	/* P9_44                GND     */
+ 	/* P9_45                GND     */
+ 	/* P9_46                GND     */
++
++	/*       (ZCZ ball A15) */
++	A15_default_pin: pinmux_A15_default_pin {
++		pinctrl-single,pins = <0x1b0  0x0b>; };     /* Mode 3 */
++	A15_clkout_pin: pinmux_A15_clkout_pin {
++		pinctrl-single,pins = <0x1b0  0x0b>; };     /* Mode 3 */
++	A15_gpio_pin: pinmux_A15_gpio_pin {
++		pinctrl-single,pins = <0x1b0  0x2f>; };     /* Mode 7, RxActive */
++	A15_gpio_pu_pin: pinmux_A15_gpio_pu_pin {
++		pinctrl-single,pins = <0x1b0  0x37>; };     /* Mode 7, Pull-Up, RxActive */
++	A15_gpio_pd_pin: pinmux_A15_gpio_pd_pin {
++		pinctrl-single,pins = <0x1b0  0x27>; };     /* Mode 7, Pull-Down, RxActive */
+ };
+ 
+ /**********************************************************************/
+@@ -1685,6 +1697,17 @@
+ 		pinctrl-6 = <&P9_92_pruin_pin>;
+ 	};
+ 
++	A15_pinmux {
++		compatible = "bone-pinmux-helper";
++		status = "okay";
++		pinctrl-names = "default", "clkout", "gpio", "gpio_pu", "gpio_pd";
++		pinctrl-0 = <&A15_default_pin>;
++		pinctrl-1 = <&A15_clkout_pin>;
++		pinctrl-2 = <&A15_gpio_pin>;
++		pinctrl-3 = <&A15_gpio_pu_pin>;
++		pinctrl-4 = <&A15_gpio_pd_pin>;
++	};
++
+ 	cape-universal {
+ 		compatible = "gpio-of-helper";
+ 		status = "okay";
+@@ -2048,5 +2071,11 @@
+ 			input;
+ 			dir-changeable;
+ 		};
++		A15 {
++			gpio-name = "A15";
++			gpio = <&gpio0 19 0>;
++			input;
++			dir-changeable;
++		};
+ 	};
+ };
+diff --git a/arch/arm/boot/dts/am335x-boneblack-common.dtsi b/arch/arm/boot/dts/am335x-boneblack-common.dtsi
+index 325daae40278..728a13ed5063 100644
+--- a/arch/arm/boot/dts/am335x-boneblack-common.dtsi
++++ b/arch/arm/boot/dts/am335x-boneblack-common.dtsi
+@@ -29,7 +29,6 @@
+ &am33xx_pinmux {
+ 	nxp_hdmi_bonelt_pins: nxp_hdmi_bonelt_pins {
+ 		pinctrl-single,pins = <
+-			AM33XX_IOPAD(0x9b0, PIN_OUTPUT_PULLDOWN | MUX_MODE3)	/* xdma_event_intr0 */
+ 			AM33XX_IOPAD(0x8a0, PIN_OUTPUT | MUX_MODE0)		/* lcd_data0.lcd_data0 */
+ 			AM33XX_IOPAD(0x8a4, PIN_OUTPUT | MUX_MODE0)		/* lcd_data1.lcd_data1 */
+ 			AM33XX_IOPAD(0x8a8, PIN_OUTPUT | MUX_MODE0)		/* lcd_data2.lcd_data2 */
+@@ -53,12 +52,6 @@
+ 		>;
+ 	};
+ 
+-	nxp_hdmi_bonelt_off_pins: nxp_hdmi_bonelt_off_pins {
+-		pinctrl-single,pins = <
+-			AM33XX_IOPAD(0x9b0, PIN_OUTPUT_PULLDOWN | MUX_MODE3)	/* xdma_event_intr0 */
+-		>;
+-	};
+-
+ 	mcasp0_pins: mcasp0_pins {
+ 		pinctrl-single,pins = <
+ 			AM33XX_IOPAD(0x9ac, PIN_INPUT_PULLUP | MUX_MODE0) /* mcasp0_ahcklx.mcasp0_ahclkx */
+@@ -92,9 +85,8 @@
+ 		compatible = "nxp,tda998x";
+ 		reg = <0x70>;
+ 
+-		pinctrl-names = "default", "off";
++		pinctrl-names = "default";
+ 		pinctrl-0 = <&nxp_hdmi_bonelt_pins>;
+-		pinctrl-1 = <&nxp_hdmi_bonelt_off_pins>;
+ 
+ 		/* Convert 24bit BGR to RGB, e.g. cross red and blue wiring */
+ 		/* video-ports = <0x234501>; */
+-- 
+2.17.1
+
