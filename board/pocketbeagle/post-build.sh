@@ -15,3 +15,5 @@ cp $BINARIES_DIR/zImage $TARGET_DIR/boot/
 cd $TARGET_DIR/boot/
 ln -s am335x-boneblack.dtb board.dtb
 echo "$(git show -s --date=short --format='Buildroot beagle-tester %cd %h')" > $TARGET_DIR/etc/dogtag
+mkdir -p $TARGET_DIR/usr/share/sounds/alsa/
+cp $BOARD_DIR/Front_Center.wav $TARGET_DIR/usr/share/sounds/alsa/
