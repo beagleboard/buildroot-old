@@ -396,8 +396,9 @@ EOF
 
 /sbin/udhcpd /etc/udhcpd.conf
 
-/sbin/udhcpc eth0 &
-
-echo gpio > /sys/devices/platform/ocp/ocp\:A15_pinmux/state
+if [ -e /sys/devices/platform/ocp/ocp\:A15_pinmux/state ]; then
+	/sbin/udhcpc eth0 &
+	echo gpio > /sys/devices/platform/ocp/ocp\:A15_pinmux/state
+fi
 
 exit 0
