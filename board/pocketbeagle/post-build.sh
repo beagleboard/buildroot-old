@@ -16,4 +16,4 @@ cp $BINARIES_DIR/*.dtb $TARGET_DIR/boot/
 cp $BINARIES_DIR/zImage $TARGET_DIR/boot/
 echo "$(git show -s --date=short --format='Buildroot beagle-tester %cd %h')" > $TARGET_DIR/etc/dogtag
 cd $TARGET_DIR/boot/
-ln -f -s am335x-boneblack.dtb board.dtb
+ln -f -s am335x-pocketbeagle.dtb board.dtb

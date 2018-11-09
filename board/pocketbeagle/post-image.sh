@@ -11,7 +11,6 @@ GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
 GIT_VERSION="$(git describe --abbrev=6 --dirty --always --tags)"
 
 rm -rf "${GENIMAGE_TMP}"
-ln -sf am335x-boneblack.dtb ${TARGET_DIR}/boot/board.dtb
 
 genimage \
     --rootpath "${TARGET_DIR}" \
@@ -22,20 +21,6 @@ genimage \
 
 dd if=${BINARIES_DIR}/MLO of=${BINARIES_DIR}/sdcard.img bs=128k count=1 seek=1 conv=notrunc
 dd if=${BINARIES_DIR}/u-boot.img of=${BINARIES_DIR}/sdcard.img bs=384k count=2 seek=1 conv=notrunc
-xz -c ${BINARIES_DIR}/sdcard.img > ${BINARIES_DIR}/beagle-tester-beaglebone-black-${GIT_VERSION}.img.xz
+xz -c ${BINARIES_DIR}/sdcard.img > ${BINARIES_DIR}/beagle-tester-pocketbeagle-${GIT_VERSION}.img.xz
 rm -f ${BINARIES_DIR}/sdcard.img
 
-rm -rf "${GENIMAGE_TMP}"
-ln -sf am335x-boneblack-wireless.dtb ${TARGET_DIR}/boot/board.dtb
-
-genimage \
-    --rootpath "${TARGET_DIR}" \
-    --tmppath "${GENIMAGE_TMP}" \
-    --inputpath "${BINARIES_DIR}" \
-    --outputpath "${BINARIES_DIR}" \
-    --config "${GENIMAGE_CFG}"
-
-dd if=${BINARIES_DIR}/MLO of=${BINARIES_DIR}/sdcard.img bs=128k count=1 seek=1 conv=notrunc
-dd if=${BINARIES_DIR}/u-boot.img of=${BINARIES_DIR}/sdcard.img bs=384k count=2 seek=1 conv=notrunc
-xz -c ${BINARIES_DIR}/sdcard.img > ${BINARIES_DIR}/beagle-tester-beaglebone-black-wireless-${GIT_VERSION}.img.xz
-rm -f ${BINARIES_DIR}/sdcard.img
