@@ -1,0 +1,25 @@
+From 42a0f618c8505527c7f1ed76b3278adc0abfdef3 Mon Sep 17 00:00:00 2001
+From: Jason Kridner <jdk@ti.com>
+Date: Fri, 4 Jan 2019 20:01:36 -0500
+Subject: [PATCH] bb.org_defconfig: enable MCP23S08 module
+
+---
+ arch/arm/configs/bb.org_defconfig | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/arch/arm/configs/bb.org_defconfig b/arch/arm/configs/bb.org_defconfig
+index 4f43aea76928..440de56ad9fe 100644
+--- a/arch/arm/configs/bb.org_defconfig
++++ b/arch/arm/configs/bb.org_defconfig
+@@ -1089,6 +1089,8 @@ CONFIG_SPI_SPIDEV=m
+ CONFIG_PPS_CLIENT_KTIMER=m
+ CONFIG_PPS_CLIENT_LDISC=m
+ CONFIG_PPS_CLIENT_GPIO=m
++CONFIG_PINCTRL=y
++CONFIG_PINCTRL_MCP23S08=m
+ CONFIG_PINCTRL_SINGLE=y
+ CONFIG_PINCTRL_PALMAS=y
+ CONFIG_GPIO_SYSFS=y
+-- 
+2.17.1
+
