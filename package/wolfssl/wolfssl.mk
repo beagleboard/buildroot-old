@@ -4,9 +4,10 @@
 #
 ################################################################################
 
-WOLFSSL_VERSION = 3.13.0
+WOLFSSL_VERSION = 3.14.0
 WOLFSSL_SITE = https://github.com/wolfSSL/wolfssl/archive
 WOLFSSL_SOURCE = v$(WOLFSSL_VERSION)-stable.tar.gz
+WOLFSSL_INSTALL_STAGING = YES
 
 WOLFSSL_LICENSE = GPL-2.0
 WOLFSSL_LICENSE_FILES = COPYING LICENSING

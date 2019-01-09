@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python
 """
 
 Utility for building Buildroot packages for existing PyPI packages
@@ -10,7 +10,9 @@ from __future__ import print_function
 from __future__ import absolute_import
 import argparse
 import json
-import six.moves.urllib.request, six.moves.urllib.error, six.moves.urllib.parse
+import six.moves.urllib.request
+import six.moves.urllib.error
+import six.moves.urllib.parse
 import sys
 import os
 import shutil
@@ -151,7 +153,7 @@ class BuildrootPackage():
         """
         Fetch a package's metadata from the python package index
         """
-        self.metadata_url = 'https://pypi.python.org/pypi/{pkg}/json'.format(
+        self.metadata_url = 'https://pypi.org/pypi/{pkg}/json'.format(
             pkg=self.real_name)
         try:
             pkg_json = six.moves.urllib.request.urlopen(self.metadata_url).read().decode()
@@ -176,6 +178,7 @@ class BuildrootPackage():
         """
         Download a package using metadata from pypi
         """
+        download = None
         try:
             self.metadata['urls'][0]['filename']
         except IndexError:
@@ -185,7 +188,7 @@ class BuildrootPackage():
             self.metadata['urls'] = [{
                 'packagetype': 'sdist',
                 'url': self.metadata['info']['download_url'],
-                'md5_digest': None}]
+                'digests': None}]
             # In this case, we can't get the name of the downloaded file
             # from the pypi api, so we need to find it, this should work
             urlpath = six.moves.urllib.parse.urlparse(
@@ -199,23 +202,26 @@ class BuildrootPackage():
                 continue
             try:
                 print('Downloading package {pkg} from {url}...'.format(
-                      pkg=self.real_name, url=download_url['url']))
+                    pkg=self.real_name, url=download_url['url']))
                 download = six.moves.urllib.request.urlopen(download_url['url'])
             except six.moves.urllib.error.HTTPError as http_error:
                 download = http_error
             else:
                 self.used_url = download_url
                 self.as_string = download.read()
-                if not download_url['md5_digest']:
+                if not download_url['digests']['md5']:
                     break
                 self.md5_sum = hashlib.md5(self.as_string).hexdigest()
-                if self.md5_sum == download_url['md5_digest']:
+                if self.md5_sum == download_url['digests']['md5']:
                     break
-        else:
-            if download.__class__ == six.moves.urllib.error.HTTPError:
-                raise download
-            raise DownloadFailed('Failed to download package {pkg}'
+
+        if download is None:
+            raise DownloadFailed('Failed to download package {pkg}: '
+                                 'No source archive available'
                                  .format(pkg=self.real_name))
+        elif download.__class__ == six.moves.urllib.error.HTTPError:
+            raise download
+
         self.filename = self.used_url['filename']
         self.url = self.used_url['url']
 
@@ -237,13 +243,14 @@ class BuildrootPackage():
                     os.makedirs(tmp_pkg)
                 except OSError as exception:
                     if exception.errno != errno.EEXIST:
-                        print("ERROR: ", exception.message, file=sys.stderr)
-                        return None, None
-                    print('WARNING:', exception.message, file=sys.stderr)
+                        print("ERROR: ", exception.strerror, file=sys.stderr)
+                        return
+                    print('WARNING:', exception.strerror, file=sys.stderr)
                     print('Removing {pkg}...'.format(pkg=tmp_pkg))
                     shutil.rmtree(tmp_pkg)
                     os.makedirs(tmp_pkg)
                 as_zipfile.extractall(tmp_pkg)
+                pkg_filename = self.filename.split(".zip")[0]
         else:
             with tarfile.open(fileobj=as_file) as as_tarfile:
                 tmp_pkg = os.path.join(tmp_path, self.buildroot_name)
@@ -251,19 +258,19 @@ class BuildrootPackage():
                     os.makedirs(tmp_pkg)
                 except OSError as exception:
                     if exception.errno != errno.EEXIST:
-                        print("ERROR: ", exception.message, file=sys.stderr)
-                        return None, None
-                    print('WARNING:', exception.message, file=sys.stderr)
+                        print("ERROR: ", exception.strerror, file=sys.stderr)
+                        return
+                    print('WARNING:', exception.strerror, file=sys.stderr)
                     print('Removing {pkg}...'.format(pkg=tmp_pkg))
                     shutil.rmtree(tmp_pkg)
                     os.makedirs(tmp_pkg)
                 as_tarfile.extractall(tmp_pkg)
+                pkg_filename = self.filename.split(".tar")[0]
 
-        tmp_extract = '{folder}/{name}-{version}'
+        tmp_extract = '{folder}/{name}'
         self.tmp_extract = tmp_extract.format(
             folder=tmp_pkg,
-            name=self.metadata_name,
-            version=self.version)
+            name=pkg_filename)
 
     def load_setup(self):
         """
@@ -389,7 +396,7 @@ class BuildrootPackage():
         """
         Try to determine the related license name.
 
-        There are two possibilities. Either the scripts tries to
+        There are two possibilities. Either the script tries to
         get license name from package's metadata or, if spdx_lookup
         package is available, the script compares license files with
         SPDX database.
@@ -398,7 +405,7 @@ class BuildrootPackage():
         if liclookup is None:
             license_dict = {
                 'Apache Software License': 'Apache-2.0',
-                'BSD License': 'BSD',
+                'BSD License': 'FIXME: please specify the exact BSD version',
                 'European Union Public Licence 1.0': 'EUPL-1.0',
                 'European Union Public Licence 1.1': 'EUPL-1.1',
                 "GNU General Public License": "GPL",
@@ -438,6 +445,8 @@ class BuildrootPackage():
                     match = liclookup.match(lic_file.read())
                 if match is not None and match.confidence >= 90.0:
                     license_names.append(match.license.id)
+                else:
+                    license_names.append("FIXME: license id couldn't be detected")
 
             if len(license_names) > 0:
                 license_line = ('{name}_LICENSE ='
@@ -527,22 +536,23 @@ class BuildrootPackage():
         path_to_hash = os.path.join(self.pkg_dir, pkg_hash)
         print('Creating {filename}...'.format(filename=path_to_hash))
         lines = []
-        if self.used_url['md5_digest']:
-            md5_comment = '# md5 from {url}, sha256 locally computed\n'.format(
+        if self.used_url['digests']['md5'] and self.used_url['digests']['sha256']:
+            hash_header = '# md5, sha256 from {url}\n'.format(
                 url=self.metadata_url)
-            lines.append(md5_comment)
+            lines.append(hash_header)
             hash_line = '{method}\t{digest}  {filename}\n'.format(
                 method='md5',
-                digest=self.used_url['md5_digest'],
+                digest=self.used_url['digests']['md5'],
                 filename=self.filename)
             lines.append(hash_line)
-        digest = hashlib.sha256(self.as_string).hexdigest()
-        hash_line = '{method}\t{digest}  {filename}\n'.format(
-            method='sha256',
-            digest=digest,
-            filename=self.filename)
-        lines.append(hash_line)
+            hash_line = '{method}\t{digest}  {filename}\n'.format(
+                method='sha256',
+                digest=self.used_url['digests']['sha256'],
+                filename=self.filename)
+            lines.append(hash_line)
 
+        if self.license_files:
+            lines.append('# Locally computed sha256 checksums\n')
         for license_file in self.license_files:
             sha256 = hashlib.sha256()
             with open(license_file, 'rb') as lic_f:
@@ -554,7 +564,7 @@ class BuildrootPackage():
             hash_line = '{method}\t{digest}  {filename}\n'.format(
                 method='sha256',
                 digest=sha256.hexdigest(),
-                filename=os.path.basename(license_file))
+                filename=license_file.replace(self.tmp_extract, '')[1:])
             lines.append(hash_line)
 
         with open(path_to_hash, 'w') as hash_file:
@@ -581,7 +591,7 @@ class BuildrootPackage():
 
         lines.append('\thelp\n')
 
-        help_lines = textwrap.wrap(self.metadata['info']['summary'],
+        help_lines = textwrap.wrap(self.metadata['info']['summary'], 62,
                                    initial_indent='\t  ',
                                    subsequent_indent='\t  ')
 
