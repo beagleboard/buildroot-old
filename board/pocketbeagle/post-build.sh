@@ -4,16 +4,7 @@
 
 BOARD_DIR="$(dirname $0)"
 
-# copy the boot files to the target rootfs
-cp $BOARD_DIR/uEnv.txt $TARGET_DIR/
-cp $BOARD_DIR/beaglerc.sh $TARGET_DIR/etc/rc.local
-mkdir -p $TARGET_DIR/usr/share/sounds/alsa/
-cp $BOARD_DIR/Front_Center.wav $TARGET_DIR/usr/share/sounds/alsa/
-mkdir -p $TARGET_DIR/var/local
-cp $BOARD_DIR/usb_image.img $TARGET_DIR/var/local/usb_mass_storage.img
 mkdir -p $TARGET_DIR/boot
 cp $BINARIES_DIR/*.dtb $TARGET_DIR/boot/
 cp $BINARIES_DIR/zImage $TARGET_DIR/boot/
 echo "$(git show -s --date=short --format='Buildroot beagle-tester %cd %h')" > $TARGET_DIR/etc/dogtag
-cd $TARGET_DIR/boot/
-ln -f -s am335x-pocketbeagle.dtb board.dtb
