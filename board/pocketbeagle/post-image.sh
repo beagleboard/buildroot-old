@@ -21,6 +21,38 @@ genimage \
 
 dd if=${BINARIES_DIR}/MLO of=${BINARIES_DIR}/sdcard.img bs=128k count=1 seek=1 conv=notrunc
 dd if=${BINARIES_DIR}/u-boot.img of=${BINARIES_DIR}/sdcard.img bs=384k count=2 seek=1 conv=notrunc
-xz -c ${BINARIES_DIR}/sdcard.img > ${BINARIES_DIR}/beagle-tester-pocketbeagle-${GIT_VERSION}.img.xz
+
+# GamePup
+${HOST_DIR}/usr/bin/mkenvimage -r -s 131072 -o ${BINARIES_DIR}/gamepup.env <<EOF
+bootcmd=setenv fdtfile am335x-pocketbeagle-gamepup.dtb;setenv bootpart 0:1;run mmcboot
+EOF
+dd if=${BINARIES_DIR}/gamepup.env of=${BINARIES_DIR}/sdcard.img bs=128k count=1 seek=16 conv=notrunc
+dd if=${BINARIES_DIR}/gamepup.env of=${BINARIES_DIR}/sdcard.img bs=128k count=1 seek=17 conv=notrunc
+xz -c ${BINARIES_DIR}/sdcard.img > ${BINARIES_DIR}/beagle-tester-${GIT_VERSION}-gamepup.img.xz
+
+# TechLab
+${HOST_DIR}/usr/bin/mkenvimage -r -s 131072 -o ${BINARIES_DIR}/techlab.env <<EOF
+bootcmd=setenv fdtfile am335x-pocketbeagle-techlab.dtb;setenv bootpart 0:1;run mmcboot
+EOF
+dd if=${BINARIES_DIR}/techlab.env of=${BINARIES_DIR}/sdcard.img bs=128k count=1 seek=16 conv=notrunc
+dd if=${BINARIES_DIR}/techlab.env of=${BINARIES_DIR}/sdcard.img bs=128k count=1 seek=17 conv=notrunc
+xz -c ${BINARIES_DIR}/sdcard.img > ${BINARIES_DIR}/beagle-tester-${GIT_VERSION}-techlab.img.xz
+
+# BeagleBone Black
+${HOST_DIR}/usr/bin/mkenvimage -r -s 131072 -o ${BINARIES_DIR}/boneblack.env <<EOF
+bootcmd=setenv fdtfile am335x-boneblack.dtb;setenv bootpart 0:1;run mmcboot
+EOF
+dd if=${BINARIES_DIR}/boneblack.env of=${BINARIES_DIR}/sdcard.img bs=128k count=1 seek=16 conv=notrunc
+dd if=${BINARIES_DIR}/boneblack.env of=${BINARIES_DIR}/sdcard.img bs=128k count=1 seek=17 conv=notrunc
+xz -c ${BINARIES_DIR}/sdcard.img > ${BINARIES_DIR}/beagle-tester-${GIT_VERSION}-boneblack.img.xz
+
+# BeagleBone Black Wireless
+${HOST_DIR}/usr/bin/mkenvimage -r -s 131072 -o ${BINARIES_DIR}/boneblack-wireless.env <<EOF
+bootcmd=setenv fdtfile am335x-boneblack-wireless.dtb;setenv bootpart 0:1;run mmcboot
+EOF
+dd if=${BINARIES_DIR}/boneblack-wireless.env of=${BINARIES_DIR}/sdcard.img bs=128k count=1 seek=16 conv=notrunc
+dd if=${BINARIES_DIR}/boneblack-wireless.env of=${BINARIES_DIR}/sdcard.img bs=128k count=1 seek=17 conv=notrunc
+xz -c ${BINARIES_DIR}/sdcard.img > ${BINARIES_DIR}/beagle-tester-${GIT_VERSION}-boneblack-wireless.img.xz
+
 rm -f ${BINARIES_DIR}/sdcard.img
 
