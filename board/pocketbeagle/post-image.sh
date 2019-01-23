@@ -23,32 +23,48 @@ dd if=${BINARIES_DIR}/MLO of=${BINARIES_DIR}/sdcard.img bs=128k count=1 seek=1 c
 dd if=${BINARIES_DIR}/u-boot.img of=${BINARIES_DIR}/sdcard.img bs=384k count=2 seek=1 conv=notrunc
 
 # GamePup
-${HOST_DIR}/usr/bin/mkenvimage -r -s 131072 -o ${BINARIES_DIR}/gamepup.env <<EOF
-bootcmd=setenv fdtfile am335x-pocketbeagle-gamepup.dtb;setenv bootpart 0:1;run mmcboot
+${HOST_DIR}/usr/bin/mkenvimage -r -s 131072 -o ${BINARIES_DIR}/gamepup.env <<'EOF'
+fdtfile=am335x-pocketbeagle-gamepup.dtb
+loadaddr=0x82000000
+fdtaddr=0x88000000
+bootcmd=mmc dev 0;load mmc 0:1 ${loadaddr} /boot/zImage;load mmc 0:1 ${fdtaddr} boot/${fdtfile};bootz ${loadaddr} - ${fdtaddr}
+bootargs=console=ttyS0,115200n8 root=/dev/mmcblk0p1 ro rootfstype=ext4 rootwait
 EOF
 dd if=${BINARIES_DIR}/gamepup.env of=${BINARIES_DIR}/sdcard.img bs=128k count=1 seek=16 conv=notrunc
 dd if=${BINARIES_DIR}/gamepup.env of=${BINARIES_DIR}/sdcard.img bs=128k count=1 seek=17 conv=notrunc
 xz -c ${BINARIES_DIR}/sdcard.img > ${BINARIES_DIR}/beagle-tester-${GIT_VERSION}-gamepup.img.xz
 
 # TechLab
-${HOST_DIR}/usr/bin/mkenvimage -r -s 131072 -o ${BINARIES_DIR}/techlab.env <<EOF
-bootcmd=setenv fdtfile am335x-pocketbeagle-techlab.dtb;setenv bootpart 0:1;run mmcboot
+${HOST_DIR}/usr/bin/mkenvimage -r -s 131072 -o ${BINARIES_DIR}/techlab.env <<'EOF'
+fdtfile=am335x-pocketbeagle-techlab.dtb
+loadaddr=0x82000000
+fdtaddr=0x88000000
+bootcmd=mmc dev 0;load mmc 0:1 ${loadaddr} /boot/zImage;load mmc 0:1 ${fdtaddr} boot/${fdtfile};bootz ${loadaddr} - ${fdtaddr}
+bootargs=console=ttyS0,115200n8 root=/dev/mmcblk0p1 ro rootfstype=ext4 rootwait
 EOF
 dd if=${BINARIES_DIR}/techlab.env of=${BINARIES_DIR}/sdcard.img bs=128k count=1 seek=16 conv=notrunc
 dd if=${BINARIES_DIR}/techlab.env of=${BINARIES_DIR}/sdcard.img bs=128k count=1 seek=17 conv=notrunc
 xz -c ${BINARIES_DIR}/sdcard.img > ${BINARIES_DIR}/beagle-tester-${GIT_VERSION}-techlab.img.xz
 
 # BeagleBone Black
-${HOST_DIR}/usr/bin/mkenvimage -r -s 131072 -o ${BINARIES_DIR}/boneblack.env <<EOF
-bootcmd=setenv fdtfile am335x-boneblack.dtb;setenv bootpart 0:1;run mmcboot
+${HOST_DIR}/usr/bin/mkenvimage -r -s 131072 -o ${BINARIES_DIR}/boneblack.env <<'EOF'
+fdtfile=am335x-boneblack.dtb
+loadaddr=0x82000000
+fdtaddr=0x88000000
+bootcmd=mmc dev 0;load mmc 0:1 ${loadaddr} /boot/zImage;load mmc 0:1 ${fdtaddr} boot/${fdtfile};bootz ${loadaddr} - ${fdtaddr}
+bootargs=console=ttyS0,115200n8 root=/dev/mmcblk0p1 ro rootfstype=ext4 rootwait
 EOF
 dd if=${BINARIES_DIR}/boneblack.env of=${BINARIES_DIR}/sdcard.img bs=128k count=1 seek=16 conv=notrunc
 dd if=${BINARIES_DIR}/boneblack.env of=${BINARIES_DIR}/sdcard.img bs=128k count=1 seek=17 conv=notrunc
 xz -c ${BINARIES_DIR}/sdcard.img > ${BINARIES_DIR}/beagle-tester-${GIT_VERSION}-boneblack.img.xz
 
 # BeagleBone Black Wireless
-${HOST_DIR}/usr/bin/mkenvimage -r -s 131072 -o ${BINARIES_DIR}/boneblack-wireless.env <<EOF
-bootcmd=setenv fdtfile am335x-boneblack-wireless.dtb;setenv bootpart 0:1;run mmcboot
+${HOST_DIR}/usr/bin/mkenvimage -r -s 131072 -o ${BINARIES_DIR}/boneblack-wireless.env <<'EOF'
+fdtfile=am335x-boneblack-wireless.dtb
+loadaddr=0x82000000
+fdtaddr=0x88000000
+bootcmd=mmc dev 0;load mmc 0:1 ${loadaddr} /boot/zImage;load mmc 0:1 ${fdtaddr} boot/${fdtfile};bootz ${loadaddr} - ${fdtaddr}
+bootargs=console=ttyS0,115200n8 root=/dev/mmcblk0p1 ro rootfstype=ext4 rootwait
 EOF
 dd if=${BINARIES_DIR}/boneblack-wireless.env of=${BINARIES_DIR}/sdcard.img bs=128k count=1 seek=16 conv=notrunc
 dd if=${BINARIES_DIR}/boneblack-wireless.env of=${BINARIES_DIR}/sdcard.img bs=128k count=1 seek=17 conv=notrunc
