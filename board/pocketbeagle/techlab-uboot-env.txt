@@ -1,0 +1,2 @@
+fdtfile=am335x-pocketbeagle-techlab.dtb
+bootcmd=run loadimage;run loadfdt;bootz ${loadaddr} - ${fdtaddr}

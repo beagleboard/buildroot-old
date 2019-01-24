@@ -1,0 +1,2 @@
+fdtfile=am335x-pocketbeagle-gamepup.dtb
+bootcmd=run loadimage;run loadfdt;bootz ${loadaddr} - ${fdtaddr}

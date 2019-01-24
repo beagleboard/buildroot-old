@@ -1,0 +1,2 @@
+fdtfile=am335x-boneblack-uboot-univ.dtb
+bootcmd=run loadimage;run loadfdt;run loademmc;run loadhdmi;run loadadc;load wifi;bootz ${loadaddr} - ${fdtaddr}
