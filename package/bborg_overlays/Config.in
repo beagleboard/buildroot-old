@@ -1,0 +1,7 @@
+config BR2_PACKAGE_BBORG_OVERLAYS
+	bool "bborg_overlays"
+	help
+	  Device tree overlays required to support most BeagleBoard.org
+	  products. See https://beagleboard.org.
+
+	  https://github.com/beagleboard/bb.org-overlays

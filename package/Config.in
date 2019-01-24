@@ -393,6 +393,7 @@ endmenu
 	source "package/am335x-pru-package/Config.in"
 	source "package/amd-catalyst/Config.in"
 	source "package/avrdude/Config.in"
+	source "package/bborg_overlays/Config.in"
 	source "package/bcache-tools/Config.in"
 	source "package/beagletester/Config.in"
 	source "package/biosdevname/Config.in"
