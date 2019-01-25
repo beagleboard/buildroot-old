@@ -31,11 +31,13 @@ HOST_KMOD_CONF_OPTS = --disable-manpages
 ifeq ($(BR2_PACKAGE_ZLIB),y)
 KMOD_DEPENDENCIES += zlib
 KMOD_CONF_OPTS += --with-zlib
+HOST_KMOD_CONF_OPTS = --with-zlib
 endif
 
 ifeq ($(BR2_PACKAGE_XZ),y)
 KMOD_DEPENDENCIES += xz
 KMOD_CONF_OPTS += --with-xz
+HOST_KMOD_CONF_OPTS = --with-xz
 endif
 
 ifeq ($(BR2_PACKAGE_PYTHON)$(BR2_PACKAGE_PYTHON3),y)
