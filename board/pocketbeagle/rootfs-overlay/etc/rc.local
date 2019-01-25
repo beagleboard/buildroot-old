@@ -405,7 +405,8 @@ use_libcomposite
 /usr/sbin/ifconfig usb0 192.168.7.2 netmask 255.255.255.0 || true
 /usr/sbin/ifconfig usb1 192.168.6.2 netmask 255.255.255.0 || true
 
-/sbin/udhcpd /etc/udhcpd.conf
+/sbin/udhcpd /etc/udhcpd.usb0.conf
+/sbin/udhcpd /etc/udhcpd.usb1.conf
 
 if [ -e /sys/devices/platform/ocp/ocp\:A15_pinmux/state ]; then
 	/sbin/udhcpc eth0 &
