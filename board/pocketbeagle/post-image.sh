@@ -23,25 +23,25 @@ dd if=${BINARIES_DIR}/MLO of=${BINARIES_DIR}/sdcard.img bs=128k count=1 seek=1 c
 dd if=${BINARIES_DIR}/u-boot.img of=${BINARIES_DIR}/sdcard.img bs=384k count=2 seek=1 conv=notrunc
 
 # GamePup
-cat ${BOARD_DIR}/default-uboot-env.txt ${BOARD_DIR}/gamepup-uboot-env.txt | ${HOST_DIR}/usr/bin/mkenvimage -r -s 131072 -o ${BINARIES_DIR}/gamepup.env
+${HOST_DIR}/usr/bin/mkenvimage -r -s 131072 -o ${BINARIES_DIR}/gamepup.env ${BOARD_DIR}/gamepup-uboot-env.txt
 dd if=${BINARIES_DIR}/gamepup.env of=${BINARIES_DIR}/sdcard.img bs=128k count=1 seek=16 conv=notrunc
 dd if=${BINARIES_DIR}/gamepup.env of=${BINARIES_DIR}/sdcard.img bs=128k count=1 seek=17 conv=notrunc
 xz -c ${BINARIES_DIR}/sdcard.img > ${BINARIES_DIR}/beagle-tester-${GIT_VERSION}-gamepup.img.xz
 
 # TechLab
-cat ${BOARD_DIR}/default-uboot-env.txt ${BOARD_DIR}/techlab-uboot-env.txt | ${HOST_DIR}/usr/bin/mkenvimage -r -s 131072 -o ${BINARIES_DIR}/techlab.env
+${HOST_DIR}/usr/bin/mkenvimage -r -s 131072 -o ${BINARIES_DIR}/techlab.env ${BOARD_DIR}/techlab-uboot-env.txt
 dd if=${BINARIES_DIR}/techlab.env of=${BINARIES_DIR}/sdcard.img bs=128k count=1 seek=16 conv=notrunc
 dd if=${BINARIES_DIR}/techlab.env of=${BINARIES_DIR}/sdcard.img bs=128k count=1 seek=17 conv=notrunc
 xz -c ${BINARIES_DIR}/sdcard.img > ${BINARIES_DIR}/beagle-tester-${GIT_VERSION}-techlab.img.xz
 
 # BeagleBone Black
-cat ${BOARD_DIR}/default-uboot-env.txt ${BOARD_DIR}/boneblack-uboot-env.txt | ${HOST_DIR}/usr/bin/mkenvimage -r -s 131072 -o ${BINARIES_DIR}/boneblack.env
+${HOST_DIR}/usr/bin/mkenvimage -r -s 131072 -o ${BINARIES_DIR}/boneblack.env ${BOARD_DIR}/boneblack-uboot-env.txt
 dd if=${BINARIES_DIR}/boneblack.env of=${BINARIES_DIR}/sdcard.img bs=128k count=1 seek=16 conv=notrunc
 dd if=${BINARIES_DIR}/boneblack.env of=${BINARIES_DIR}/sdcard.img bs=128k count=1 seek=17 conv=notrunc
 xz -c ${BINARIES_DIR}/sdcard.img > ${BINARIES_DIR}/beagle-tester-${GIT_VERSION}-boneblack.img.xz
 
 # BeagleBone Black Wireless
-cat ${BOARD_DIR}/default-uboot-env.txt ${BOARD_DIR}/boneblack-wireless-uboot-env.txt | ${HOST_DIR}/usr/bin/mkenvimage -r -s 131072 -o ${BINARIES_DIR}/boneblack-wireless.env
+${HOST_DIR}/usr/bin/mkenvimage -r -s 131072 -o ${BINARIES_DIR}/boneblack-wireless.env ${BOARD_DIR}/boneblack-wireless-uboot-env.txt
 dd if=${BINARIES_DIR}/boneblack-wireless.env of=${BINARIES_DIR}/sdcard.img bs=128k count=1 seek=16 conv=notrunc
 dd if=${BINARIES_DIR}/boneblack-wireless.env of=${BINARIES_DIR}/sdcard.img bs=128k count=1 seek=17 conv=notrunc
 xz -c ${BINARIES_DIR}/sdcard.img > ${BINARIES_DIR}/beagle-tester-${GIT_VERSION}-boneblack-wireless.img.xz
