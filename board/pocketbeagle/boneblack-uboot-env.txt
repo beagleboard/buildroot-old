@@ -1,16 +1,14 @@
 fdtfile=am335x-boneblack-uboot-univ.dtb
-bootcmd=run loadimage;run loadfdt;run loademmc;run loadhdmi;run loadadc;bootz ${loadaddr} - ${fdtaddr}
+overlays=BB-BONE-eMMC1-01-00A0.dtbo BB-HDMI-TDA998x-00A0.dtbo BB-ADC-00A0.dtbo
+bootcmd=run loadimage;run loadfdt;run loadoverlays;bootz ${loadaddr} - ${fdtaddr}
 bootargs=console=ttyS0,115200n8 root=/dev/mmcblk0p1 ro rootfstype=ext4 rootwait
+loadaddr=0x82000000
 fdt_buffer=0x60000
 fdtaddr=88000000
-fdtapply=fdt addr ${fdtaddr};fdt resize ${fdt_buffer};fdt apply ${rdaddr};fdt resize ${fdt_buffer}
-loadadc=setenv overlay BB-ADC-00A0.dtbo;run loadoverlay
-loadaddr=0x82000000
-loademmc=setenv overlay BB-BONE-eMMC1-01-00A0.dtbo;run loadoverlay
-loadfdt=mmc dev 0;load mmc 0:1 ${fdtaddr} boot/${fdtfile}
-loadhdmi=setenv overlay BB-HDMI-TDA998x-00A0.dtbo;run loadoverlay
-loadimage=mmc dev 0;load mmc 0:1 ${loadaddr} /boot/zImage
-loadoverlay=mmc dev 0;load mmc 0:1 ${rdaddr} /lib/firmware/${overlay};run fdtapply
-loadwifi=setenv overlay BB-BBBW-WL1835-00A0.dtbo;run loadoverlay
 rdaddr=0x88080000
+loadimage=mmc dev 0;load mmc 0:1 ${loadaddr} /boot/zImage
+loadfdt=mmc dev 0;load mmc 0:1 ${fdtaddr} /boot/${fdtfile}
+loadoverlays=for i in ${overlays};do setenv overlay $i;run loadoverlay;done
+loadoverlay=mmc dev 0;load mmc 0:1 ${rdaddr} /lib/firmware/${overlay};run fdtapply
+fdtapply=fdt addr ${fdtaddr};fdt resize ${fdt_buffer};fdt apply ${rdaddr};fdt resize ${fdt_buffer}
 
