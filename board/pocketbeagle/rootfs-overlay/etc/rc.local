@@ -409,8 +409,11 @@ use_libcomposite
 /sbin/udhcpd /etc/udhcpd.usb1.conf
 
 if [ -e /sys/devices/platform/ocp/ocp\:A15_pinmux/state ]; then
-	/sbin/udhcpc eth0 &
 	echo gpio > /sys/devices/platform/ocp/ocp\:A15_pinmux/state
+fi
+
+if [ -e /sys/class/net/eth0 ]; then
+	/sbin/udhcpc eth0
 fi
 
 exit 0
