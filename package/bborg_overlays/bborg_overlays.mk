@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-BBORG_OVERLAYS_VERSION = a17e25b475a57148e7d6c3e3dbc6219078c6c5d4
+BBORG_OVERLAYS_VERSION = 9cc7d07a4e27af7886d3177b5e0575aaf1954f0a
 BBORG_OVERLAYS_SITE = $(call github,beagleboard,bb.org-overlays,$(BBORG_OVERLAYS_VERSION))
 BBORG_OVERLAYS_INSTALL_STAGING = YES
 BBORG_OVERLAYS_LICENSE = GPLv2
