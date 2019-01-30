@@ -1,5 +1,6 @@
 config BR2_PACKAGE_BBORG_OVERLAYS
 	bool "bborg_overlays"
+	depends on BR2_PACKAGE_HOST_DTC
 	help
 	  Device tree overlays required to support most BeagleBoard.org
 	  products. See https://beagleboard.org.
