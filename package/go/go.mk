@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-GO_VERSION = 1.11.4
+GO_VERSION = 1.11.5
 GO_SITE = https://storage.googleapis.com/golang
 GO_SOURCE = go$(GO_VERSION).src.tar.gz
 
@@ -42,6 +42,7 @@ HOST_GO_ROOT = $(HOST_DIR)/lib/go
 # For the convienience of target packages.
 HOST_GO_TOOLDIR = $(HOST_GO_ROOT)/pkg/tool/linux_$(GO_GOARCH)
 HOST_GO_TARGET_ENV = \
+	GO111MODULE=off \
 	GOARCH=$(GO_GOARCH) \
 	GOROOT="$(HOST_GO_ROOT)" \
 	CC="$(TARGET_CC)" \
@@ -61,6 +62,7 @@ endif
 # The go build system is not compatible with ccache, so use
 # HOSTCC_NOCCACHE.  See https://github.com/golang/go/issues/11685.
 HOST_GO_MAKE_ENV = \
+	GO111MODULE=off \
 	GOROOT_BOOTSTRAP=$(HOST_GO_BOOTSTRAP_ROOT) \
 	GOROOT_FINAL=$(HOST_GO_ROOT) \
 	GOROOT="$(@D)" \

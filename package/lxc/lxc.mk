@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-LXC_VERSION = 3.0.3
+LXC_VERSION = 3.1.0
 LXC_SITE = https://linuxcontainers.org/downloads/lxc
 LXC_LICENSE = LGPL-2.1+
 LXC_LICENSE_FILES = COPYING
@@ -16,6 +16,10 @@ LXC_AUTORECONF = YES
 LXC_CONF_OPTS = --disable-apparmor --with-distro=buildroot \
 	--disable-werror \
 	$(if $(BR2_PACKAGE_BASH),,--disable-bash)
+
+ifeq ($(BR2_PACKAGE_BASH_COMPLETION),y)
+LXC_DEPENDENCIES += bash-completion
+endif
 
 ifeq ($(BR2_PACKAGE_GNUTLS),y)
 LXC_CONF_OPTS += --enable-gnutls

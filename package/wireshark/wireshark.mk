@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-WIRESHARK_VERSION = 2.6.4
+WIRESHARK_VERSION = 2.6.6
 WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.xz
 WIRESHARK_SITE = https://www.wireshark.org/download/src/all-versions
 WIRESHARK_LICENSE = wireshark license
@@ -107,7 +107,7 @@ WIRESHARK_CONF_OPTS += --without-libxml2
 endif
 
 # no support for lua53 yet
-ifeq ($(BR2_PACKAGE_LUA_5_1)$(BR2_PACKAGE_LUA_5_2),y)
+ifeq ($(BR2_PACKAGE_LUA_5_1),y)
 WIRESHARK_CONF_OPTS += --with-lua
 WIRESHARK_DEPENDENCIES += lua
 else
