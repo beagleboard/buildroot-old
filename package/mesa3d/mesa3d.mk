@@ -219,6 +219,9 @@ else
 MESA3D_CONF_OPTS += --disable-lmsensors
 endif
 
+# force mesa3d to static=no while recalbox forces it
+MESA3D_CONF_OPTS += --enable-static=no
+
 # Avoid automatic search of llvm-config
 MESA3D_CONF_OPTS += --with-llvm-prefix=$(STAGING_DIR)/usr/bin
 

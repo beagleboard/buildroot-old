@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-BLUEZ5_UTILS_VERSION = 5.48
+BLUEZ5_UTILS_VERSION = 5.43
 BLUEZ5_UTILS_SOURCE = bluez-$(BLUEZ5_UTILS_VERSION).tar.xz
 BLUEZ5_UTILS_SITE = $(BR2_KERNEL_MIRROR)/linux/bluetooth
 BLUEZ5_UTILS_INSTALL_STAGING = YES
@@ -121,5 +121,13 @@ define BLUEZ5_UTILS_INSTALL_INIT_SYSTEMD
 	ln -fs ../../../usr/lib/systemd/system/bluetooth.service \
 		$(TARGET_DIR)/etc/systemd/system/dbus-org.bluez.service
 endef
+
+define BLUEZ5_UTILS_INSTALL_CONF_FILES
+	mkdir -p $(TARGET_DIR)/etc/bluetooth
+	for i in `find $(@D) -name *.conf` ; do \
+		$(INSTALL) -D -m 755 $$i $(TARGET_DIR)/etc/bluetooth/ ; \
+	done
+endef
+BLUEZ5_UTILS_POST_INSTALL_TARGET_HOOKS += BLUEZ5_UTILS_INSTALL_CONF_FILES
 
 $(eval $(autotools-package))

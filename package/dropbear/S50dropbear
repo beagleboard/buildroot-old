@@ -6,7 +6,15 @@
 # Allow a few customizations from a config file
 test -r /etc/default/dropbear && . /etc/default/dropbear
 
+systemsetting="python /usr/lib/python2.7/site-packages/configgen/settings/recalboxSettings.pyc"
+
 start() {
+        enabled="`$systemsetting  -command load -key system.ssh.enabled`"
+        if [ "$enabled" == "0" ];then
+          echo "SSH services: disabled"
+          exit 0
+        fi
+
 	DROPBEAR_ARGS="$DROPBEAR_ARGS -R"
 
 	# If /etc/dropbear is a symlink to /var/run/dropbear, and
@@ -36,7 +44,7 @@ start() {
 stop() {
 	printf "Stopping dropbear sshd: "
 	start-stop-daemon -K -q -p /var/run/dropbear.pid
-	[ $? = 0 ] && echo "OK" || echo "FAIL"
+	start-stop-daemon -K -q -n dropbear
 }
 restart() {
 	stop
