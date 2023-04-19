@@ -1,28 +1,27 @@
-# Configuration for Gitlab-CI.
-# Builds appear on https://gitlab.com/buildroot.org/buildroot/pipelines
-
-image: $CI_REGISTRY/buildroot.org/buildroot/base:20230207.1123
+image: ubuntu:22.04
 
 stages:
-  - generate-gitlab-ci
   - build
 
-generate-gitlab-ci-yml:
-  stage: generate-gitlab-ci
-  script: ./support/scripts/generate-gitlab-ci-yml support/misc/gitlab-ci.yml.in > generated-gitlab-ci.yml
-  artifacts:
-    when: always
-    paths:
-      - generated-gitlab-ci.yml
-      - br-test-pkg/*/.config
-      - br-test-pkg/*/missing.config
+variables:
+  BR2_DL_DIR: "/tmp/br2_downloads"
 
-buildroot-pipeline:
+build:
   stage: build
-  trigger:
-    include:
-      - artifact: generated-gitlab-ci.yml
-        job: generate-gitlab-ci-yml
-    strategy: depend
-  variables:
-    PARENT_PIPELINE_ID: $CI_PIPELINE_ID
+  before_script:
+    - apt-get update
+    - apt-get install -y build-essential file wget cpio unzip bc rsync bison flex device-tree-compiler python3-distutils swig python3-dev libssl-dev git
+  script:
+    - make O=$PWD/build/beaglebone beaglebone_defconfig
+    - make --silent V=0 O=$PWD/build/beaglebone
+#    - make O=$PWD/build/beaglebone_qt5 beaglebone_qt5_defconfig
+#    - make --silent V=0 O=$PWD/build/beaglebone_qt5
+#    - make O=$PWD/build/beagleboard-x15 beagleboardx15_defconfig
+#    - make --silent V=0 O=$PWD/build/beagleboard-x15
+#    - make O=$PWD/build/beaglebone_ai beagleboneai_defconfig
+#    - make --silent V=0 O=$PWD/build/beaglebone_ai
+#    - make O=$PWD/build/beaglevstarlight beaglev_defconfig
+#    - make --silent V=0 O=$PWD/build/beaglevstarlight
+  artifacts:
+    paths:
+      - build/*/images
