@@ -1,27 +1,61 @@
 image: ubuntu:22.04
 
-stages:
-  - build
-
 variables:
   BR2_DL_DIR: "/tmp/br2_downloads"
+  BR2_CCACHE_DIR: "/tmp/br2_ccache"
+  BR2_CCACHE: "y"
 
-build:
+cache:
+  key: "1"
+  paths:
+    - /tmp/br2_downloads
+    - /tmp/br2_ccache
+
+before_script:
+  - apt-get update
+  - apt-get install -y build-essential file wget cpio unzip bc rsync bison flex device-tree-compiler python3-distutils swig python3-dev libssl-dev git ccache
+
+build_beaglebone:
   stage: build
-  before_script:
-    - apt-get update
-    - apt-get install -y build-essential file wget cpio unzip bc rsync bison flex device-tree-compiler python3-distutils swig python3-dev libssl-dev git
   script:
     - make O=$PWD/build/beaglebone beaglebone_defconfig
     - make --silent V=0 O=$PWD/build/beaglebone
-#    - make O=$PWD/build/beaglebone_qt5 beaglebone_qt5_defconfig
-#    - make --silent V=0 O=$PWD/build/beaglebone_qt5
-#    - make O=$PWD/build/beagleboard-x15 beagleboardx15_defconfig
-#    - make --silent V=0 O=$PWD/build/beagleboard-x15
-#    - make O=$PWD/build/beaglebone_ai beagleboneai_defconfig
-#    - make --silent V=0 O=$PWD/build/beaglebone_ai
-#    - make O=$PWD/build/beaglevstarlight beaglev_defconfig
-#    - make --silent V=0 O=$PWD/build/beaglevstarlight
+  artifacts:
+    paths:
+      - build/*/images
+
+build_beaglebone_qt:
+  stage: build
+  script:
+    - make O=$PWD/build/beaglebone_qt5 beaglebone_qt5_defconfig
+    - make --silent V=0 O=$PWD/build/beaglebone_qt5
+  artifacts:
+    paths:
+      - build/*/images
+
+build_beagleboard_x15:
+  stage: build
+  script:
+    - make O=$PWD/build/beagleboard-x15 beagleboardx15_defconfig
+    - make --silent V=0 O=$PWD/build/beagleboard-x15
+  artifacts:
+    paths:
+      - build/*/images
+
+build_beaglebone_ai:
+  stage: build
+  script:
+    - make O=$PWD/build/beaglebone_ai beagleboneai_defconfig
+    - make --silent V=0 O=$PWD/build/beaglebone_ai
+  artifacts:
+    paths:
+      - build/*/images
+
+build_beaglev_starlight:
+  stage: build
+  script:
+    - make O=$PWD/build/beaglevstarlight beaglev_defconfig
+    - make --silent V=0 O=$PWD/build/beaglevstarlight
   artifacts:
     paths:
       - build/*/images
