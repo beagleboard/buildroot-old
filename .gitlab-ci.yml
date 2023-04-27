@@ -1,4 +1,4 @@
-image: robertcnelson/debian-bullseye-slim-linux-compile:latest
+image: robertcnelson/debian-bullseye-slim-buildroot-compile:latest
 #image: beagle/ubuntu-build
 
 variables:
@@ -18,7 +18,7 @@ build_beaglebone:
   script:
     - env
     - make O=$PWD/build/beaglebone beaglebone_defconfig
-    - make -j8 --silent V=0 O=$PWD/build/beaglebone
+    - make --silent V=0 O=$PWD/build/beaglebone
   artifacts:
     paths:
       - build/*/images
@@ -30,7 +30,7 @@ build_beaglebone_qt:
   script:
     - env
     - make O=$PWD/build/beaglebone_qt5 beaglebone_qt5_defconfig
-    - make -j8 --silent V=0 O=$PWD/build/beaglebone_qt5
+    - make --silent V=0 O=$PWD/build/beaglebone_qt5
   artifacts:
     paths:
       - build/*/images
@@ -42,7 +42,7 @@ build_beagleboard_x15:
   script:
     - env
     - make O=$PWD/build/beagleboard-x15 beagleboardx15_defconfig
-    - make -j8 --silent V=0 O=$PWD/build/beagleboard-x15
+    - make --silent V=0 O=$PWD/build/beagleboard-x15
   artifacts:
     paths:
       - build/*/images
@@ -54,7 +54,7 @@ build_beaglebone_ai:
   script:
     - env
     - make O=$PWD/build/beaglebone_ai beagleboneai_defconfig
-    - make -j8 --silent V=0 O=$PWD/build/beaglebone_ai
+    - make --silent V=0 O=$PWD/build/beaglebone_ai
   artifacts:
     paths:
       - build/*/images
@@ -66,7 +66,7 @@ build_beaglev_starlight:
   script:
     - env
     - make O=$PWD/build/beaglevstarlight beaglev_defconfig
-    - make -j8 --silent V=0 O=$PWD/build/beaglevstarlight
+    - make --silent V=0 O=$PWD/build/beaglevstarlight
   artifacts:
     paths:
       - build/*/images
