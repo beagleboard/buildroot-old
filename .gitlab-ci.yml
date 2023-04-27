@@ -1,4 +1,4 @@
-image: ubuntu:22.04
+image: beagle/ubuntu-build
 
 variables:
   BR2_DL_DIR: "/tmp/br2_downloads"
@@ -11,13 +11,10 @@ cache:
     - /tmp/br2_downloads
     - /tmp/br2_ccache
 
-before_script:
-  - apt-get update
-  - apt-get install -y build-essential file wget cpio unzip bc rsync bison flex device-tree-compiler python3-distutils swig python3-dev libssl-dev git ccache
-
 build_beaglebone:
   stage: build
   script:
+    - env
     - make O=$PWD/build/beaglebone beaglebone_defconfig
     - make --silent V=0 O=$PWD/build/beaglebone
   artifacts:
@@ -27,6 +24,7 @@ build_beaglebone:
 build_beaglebone_qt:
   stage: build
   script:
+    - env
     - make O=$PWD/build/beaglebone_qt5 beaglebone_qt5_defconfig
     - make --silent V=0 O=$PWD/build/beaglebone_qt5
   artifacts:
@@ -36,6 +34,7 @@ build_beaglebone_qt:
 build_beagleboard_x15:
   stage: build
   script:
+    - env
     - make O=$PWD/build/beagleboard-x15 beagleboardx15_defconfig
     - make --silent V=0 O=$PWD/build/beagleboard-x15
   artifacts:
@@ -45,6 +44,7 @@ build_beagleboard_x15:
 build_beaglebone_ai:
   stage: build
   script:
+    - env
     - make O=$PWD/build/beaglebone_ai beagleboneai_defconfig
     - make --silent V=0 O=$PWD/build/beaglebone_ai
   artifacts:
@@ -54,6 +54,7 @@ build_beaglebone_ai:
 build_beaglev_starlight:
   stage: build
   script:
+    - env
     - make O=$PWD/build/beaglevstarlight beaglev_defconfig
     - make --silent V=0 O=$PWD/build/beaglevstarlight
   artifacts:
