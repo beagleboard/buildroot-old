@@ -1,4 +1,5 @@
-image: beagle/ubuntu-build
+image: robertcnelson/debian-bullseye-slim-linux-compile:latest
+#image: beagle/ubuntu-build
 
 variables:
   BR2_CCACHE_DIR: "/tmp/br2_ccache"
@@ -11,51 +12,61 @@ cache:
     - /tmp/br2_ccache
 
 build_beaglebone:
+  tags:
+    - docker-amd64
   stage: build
   script:
     - env
     - make O=$PWD/build/beaglebone beaglebone_defconfig
-    - make --silent V=0 O=$PWD/build/beaglebone
+    - make -j8 --silent V=0 O=$PWD/build/beaglebone
   artifacts:
     paths:
       - build/*/images
 
 build_beaglebone_qt:
+  tags:
+    - docker-amd64
   stage: build
   script:
     - env
     - make O=$PWD/build/beaglebone_qt5 beaglebone_qt5_defconfig
-    - make --silent V=0 O=$PWD/build/beaglebone_qt5
+    - make -j8 --silent V=0 O=$PWD/build/beaglebone_qt5
   artifacts:
     paths:
       - build/*/images
 
 build_beagleboard_x15:
+  tags:
+    - docker-amd64
   stage: build
   script:
     - env
     - make O=$PWD/build/beagleboard-x15 beagleboardx15_defconfig
-    - make --silent V=0 O=$PWD/build/beagleboard-x15
+    - make -j8 --silent V=0 O=$PWD/build/beagleboard-x15
   artifacts:
     paths:
       - build/*/images
 
 build_beaglebone_ai:
+  tags:
+    - docker-amd64
   stage: build
   script:
     - env
     - make O=$PWD/build/beaglebone_ai beagleboneai_defconfig
-    - make --silent V=0 O=$PWD/build/beaglebone_ai
+    - make -j8 --silent V=0 O=$PWD/build/beaglebone_ai
   artifacts:
     paths:
       - build/*/images
 
 build_beaglev_starlight:
+  tags:
+    - docker-amd64
   stage: build
   script:
     - env
     - make O=$PWD/build/beaglevstarlight beaglev_defconfig
-    - make --silent V=0 O=$PWD/build/beaglevstarlight
+    - make -j8 --silent V=0 O=$PWD/build/beaglevstarlight
   artifacts:
     paths:
       - build/*/images
